@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri Peserta | Lomba Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="celestial-background">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div class="aurora-blob blob1"></div>
+        <div class="aurora-blob blob2"></div>
+    </div>
+
+    <div class="container">
+        <div class="content-wrapper">
+            <!-- GANTI NAVBAR LAMA DENGAN INI DI SEMUA HALAMAN -->
+<nav class="navbar animated" style="animation-delay: 0.1s;">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="about.html" class="nav-link">Tentang</a>
+    <a href="gallery.html" class="nav-link active">Galeri</a>
+    <a href="vote.html" class="nav-link">Vote Favorit</a>
+    <a href="winners.html" class="nav-link">Pemenang</a>
+    <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+    <a href="statistics.html" class="nav-link">Statistik</a>
+    <a href="faq.html" class="nav-link">FAQ</a>
+    <a href="login.html" class="nav-link">Area Juri</a>
+</nav>
+            <h1 class="animated" style="animation-delay: 0.2s;">Galeri Peserta</h1>
+            <p class="animated" style="animation-delay: 0.3s;">Jelajahi kreativitas dan karya dari semua peserta Portfolio Arena.</p>
+
+            <div id="galleryGrid" class="gallery-grid">
+                <!-- Kartu peserta akan dimuat di sini oleh JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script> <!-- Muat data peserta -->
+    <script>
+        const container = document.querySelector('.container');
+        const galleryGrid = document.getElementById('galleryGrid');
+
+        // Efek Spotlight
+        container.addEventListener('mousemove', e => {
+            const rect = container.getBoundingClientRect();
+            container.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+            container.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+        });
+
+        // Fungsi untuk memuat galeri
+        function loadGallery() {
+            participantsList.forEach((participant, index) => {
+                const card = document.createElement('div');
+                card.className = 'participant-card animated';
+                card.style.animationDelay = `${0.4 + index * 0.1}s`;
+
+                // Ekstrak nama dan sekolah
+                const nameMatch = participant.name.match(/(.+?)\s\((.+)\)/);
+                const name = nameMatch ? nameMatch[1] : participant.name;
+                const school = nameMatch ? nameMatch[2] : '';
+
+                card.innerHTML = `
+                    <img src="${participant.screenshot}" alt="Screenshot ${name}" class="card-image">
+                    <div class="card-content">
+                        <h3>${name}</h3>
+                        <p>${school}</p>
+                        <a href="${participant.link}" target="_blank" class="button">Kunjungi Website</a>
+                    </div>
+                `;
+                galleryGrid.appendChild(card);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadGallery);
+    </script>
+</body>
+</html>

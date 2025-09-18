@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Area Penjurian | Lomba Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        if (sessionStorage.getItem("juryAuthenticated") !== "true") {
+            window.location.replace("login.html");
+        }
+    </script>
+</head>
+<body>
+    <div class="celestial-background"><div id="stars"></div><div id="stars2"></div><div class="aurora-blob blob1"></div><div class="aurora-blob blob2"></div></div>
+    <div class="container">
+        <div class="content-wrapper">
+            <nav class="navbar animated" style="animation-delay: 0.1s;">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">Tentang</a>
+                <a href="gallery.html" class="nav-link">Galeri</a>
+                <a href="vote.html" class="nav-link">Vote Favorit</a>
+                <a href="winners.html" class="nav-link">Pemenang</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                <a href="statistics.html" class="nav-link">Statistik</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+                <a href="login.html" class="nav-link">Area Juri</a>
+            </nav>
+            <h1 class="animated" style="animation-delay: 0.2s;">Form Penilaian</h1>
+            <form id="juryForm" class="animated" style="animation-delay: 0.3s;">
+                <div class="form-group"><label for="judge_name">Nama Juri</label><select id="judge_name" name="judge_name" required><option value="" disabled selected>Pilih Juri</option><option value="Pak Hadi">Pak Hadi</option><option value="Mas Andrei">Mas Andrei</option><option value="Ko Yovie">Ko Yovie</option></select></div>
+                <div class="form-group"><label for="participant_name">Nama Peserta</label><select id="participant_name" name="participant_name" required><option value="" disabled selected>Pilih Peserta</option></select></div>
+                <a id="viewPortfolioBtn" href="#" target="_blank" class="button" style="display: none; margin-top: -0.5rem; margin-bottom: 1.5rem; background: transparent; border-color: var(--text-secondary); color: var(--text-secondary);">Buka Portofolio</a>
+                <div class="form-group"><label for="design">Desain Visual (1-10)</label><input type="number" id="design" name="design" min="1" max="10" required></div>
+                <div class="form-group"><label for="functionality">Fungsionalitas (1-10)</label><input type="number" id="functionality" name="functionality" min="1" max="10" required></div>
+                <div class="form-group"><label for="content">Kualitas Konten (1-10)</label><input type="number" id="content" name="content" min="1" max="10" required></div>
+                <div class="form-group"><label for="responsiveness">Responsivitas (1-10)</label><input type="number" id="responsiveness" name="responsiveness" min="1" max="10" required></div>
+                <div class="form-group"><label for="comments">Komentar Tambahan</label><textarea id="comments" name="comments" rows="4" placeholder="Berikan masukan yang membangun..."></textarea></div>
+                <button type="submit" id="submitBtn">Kirim Penilaian</button>
+            </form>
+        </div>
+    </div>
+    <div id="toast" class="toast"></div>
+    <script src="data.js"></script> 
+    <script>
+        const form = document.getElementById("juryForm");
+        const submitBtn = document.getElementById("submitBtn");
+        const participantSelect = document.getElementById("participant_name");
+        const viewPortfolioBtn = document.getElementById("viewPortfolioBtn");
+        const container = document.querySelector(".container");
+        const scriptURL = "https://script.google.com/macros/s/AKfycbx0OgL2dk0N90CwfTdeRQZVqGK_GnbjFRFnbHX8Foh88IFLCjtZ9cHZVI-nK4DWIRmhRw/exec";
+        container.addEventListener("mousemove", e => { const rect = container.getBoundingClientRect( ); container.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`); container.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`); });
+        function loadParticipants() { participantsList.forEach(p => { const o = document.createElement("option"); o.value = p.name; o.textContent = p.name; participantSelect.appendChild(o); }); }
+        document.addEventListener("DOMContentLoaded", loadParticipants);
+        participantSelect.addEventListener("change", e => { const p = participantsList.find(p => p.name === e.target.value); if (p && p.link) { viewPortfolioBtn.href = p.link; viewPortfolioBtn.style.display = "block"; } else { viewPortfolioBtn.style.display = "none"; } });
+        function showToast(msg, isErr = false) { const t = document.getElementById("toast"); t.textContent = msg; t.className = `toast show ${isErr ? "error" : ""}`; setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000); }
+        form.addEventListener("submit", e => {
+            e.preventDefault();
+            submitBtn.disabled = true; submitBtn.textContent = "Mengirim...";
+            const formData = new FormData(form);
+            const total_score = ["design", "functionality", "content", "responsiveness"].reduce((sum, key) => sum + (parseInt(formData.get(key)) || 0), 0);
+            formData.append("total_score", total_score);
+            fetch(scriptURL, { method: "POST", body: formData })
+                .then(res => { showToast("Penilaian berhasil dikirim!", false); form.reset(); viewPortfolioBtn.style.display = "none"; })
+                .catch(err => showToast("Error! Gagal mengirim data.", true))
+                .finally(() => { submitBtn.disabled = false; submitBtn.textContent = "Kirim Penilaian"; });
+        });
+    </script>
+</body>
+</html>

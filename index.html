@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Arena - Lomba Website Portofolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="celestial-background">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div class="aurora-blob blob1"></div>
+        <div class="aurora-blob blob2"></div>
+    </div>
+
+    <div class="container">
+        <div class="content-wrapper">
+    <!-- GANTI NAVBAR LAMA DENGAN INI DI SEMUA HALAMAN -->
+<nav class="navbar animated" style="animation-delay: 0.1s;">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="about.html" class="nav-link">Tentang</a>
+    <a href="gallery.html" class="nav-link">Galeri</a>
+    <a href="vote.html" class="nav-link">Vote Favorit</a>
+    <a href="winners.html" class="nav-link">Pemenang</a>
+    <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+    <a href="statistics.html" class="nav-link">Statistik</a>
+    <a href="faq.html" class="nav-link">FAQ</a>
+    <a href="login.html" class="nav-link">Area Juri</a>
+</nav>
+            <h1 class="animated" style="animation-delay: 0.1s;">Lomba Website Portofolio</h1>
+            <p class="animated" style="animation-delay: 0.3s;">Tunjukkan kreativitas dan keahlian teknis dalam merancang website portofolio yang fungsional dan menawan.</p>
+            
+            <div class="animated" style="animation-delay: 0.4s; text-align:center; margin: 2.5rem 0;">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeQd60H1PolXhInWdpzAR3m_Iz61duWoKTumkdXwJRxAnA32Q/viewform" target="_blank" class="button">Kumpulkan Karyamu</a>
+            </div>
+
+            <h2 class="animated" style="animation-delay: 0.5s;">Timeline</h2>
+            <ul class="animated" style="animation-delay: 0.6s;">
+                <li><strong>Pengumpulan Karya:</strong> 1 - 31 September 2025</li>
+                <li><strong>Proses Penjurian:</strong> 1 - 2 Oktober 2025</li>
+                <li><strong>Pengumuman Pemenang:</strong> 3 Oktober 2025</li>
+                <li><strong>Pembagian Sertifikat:</strong> 4 Oktober 2025</li>
+            </ul>
+
+            <h2 class="animated" style="animation-delay: 0.7s;">Hadiah</h2>
+            <ul class="animated" style="animation-delay: 0.8s;">
+                <li>🥇 <strong>Juara 1:</strong> Uang tunai <strong>Rp 100.000</strong> + Sertifikat</li>
+                <li>🥈 <strong>Juara 2:</strong> Uang tunai <strong>Rp 50.000</strong> + Sertifikat</li>
+                <li>🥉 <strong>Juara 3:</strong> Uang tunai <strong>Rp 25.000</strong> + Sertifikat</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const container = document.querySelector('.container' );
+        container.addEventListener('mousemove', e => {
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            container.style.setProperty('--mouse-x', `${x}px`);
+            container.style.setProperty('--mouse-y', `${y}px`);
+        });
+    </script>
+</body>
+</html>

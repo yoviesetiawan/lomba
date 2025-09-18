@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tentang Lomba | Lomba Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="celestial-background">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div class="aurora-blob blob1"></div>
+        <div class="aurora-blob blob2"></div>
+    </div>
+
+    <div class="container">
+        <div class="content-wrapper">
+            <nav class="navbar animated" style="animation-delay: 0.1s;">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link active">Tentang</a>
+                <a href="gallery.html" class="nav-link">Galeri</a>
+                <a href="vote.html" class="nav-link">Vote Favorit</a>
+                <a href="winners.html" class="nav-link">Pemenang</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                <a href="statistics.html" class="nav-link">Statistik</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+                <a href="login.html" class="nav-link">Area Juri</a>
+            </nav>
+            
+            <div class="about-section">
+                <h1 class="animated" style="animation-delay: 0.2s;">Portfolio Arena: Edisi Intern BWD</h1>
+                <p class="animated" style="animation-delay: 0.3s;">Selamat Datang di Portfolio Arena: Edisi Intern BWD! Portfolio Arena adalah kompetisi internal eksklusif yang dirancang untuk mengasah dan memamerkan bakat luar biasa dari para intern di Bali Web Design. Ini adalah panggung di mana Anda, para calon profesional masa depan, ditantang untuk melampaui tugas harian dan menciptakan sebuah mahakarya digital: website portofolio yang mencerminkan standar keunggulan, inovasi, dan kualitas yang diusung oleh Bali Web Design.</p>
+                
+                <h2 class="animated" style="animation-delay: 0.4s;">Tujuan Kompetisi</h2>
+                <p class="animated" style="animation-delay: 0.45s;">Lebih dari sekadar lomba, Portfolio Arena adalah investasi dalam pertumbuhan Anda sebagai seorang profesional. Tujuan kami adalah:</p>
+                <div class="criteria-grid animated" style="animation-delay: 0.5s;">
+                    <div class="criteria-card">
+                        <h3>Inovasi Berstandar Industri</h3>
+                        <p>Menantang Anda untuk menerapkan tren desain dan teknologi terkini dalam sebuah proyek nyata.</p>
+                    </div>
+                    <div class="criteria-card">
+                        <h3>Pengembangan Diri</h3>
+                        <p>Memberikan kesempatan untuk membangun portofolio pribadi yang solid, yang akan menjadi aset tak ternilai dalam karier Anda.</p>
+                    </div>
+                    <div class="criteria-card">
+                        <h3>Budaya Unggul</h3>
+                        <p>Menciptakan semangat kompetisi yang sehat, di mana setiap individu terpacu untuk menunjukkan versi terbaik dari dirinya.</p>
+                    </div>
+                    <div class="criteria-card">
+                        <h3>Identifikasi Talenta</h3>
+                        <p>Memberikan platform bagi manajemen untuk mengenali potensi dan keahlian unik yang dimiliki oleh setiap intern.</p>
+                    </div>
+                </div>
+
+                <h2 class="animated" style="animation-delay: 0.6s;">Arena Penilaian: Standar Profesional</h2>
+                <p class="animated" style="animation-delay: 0.65s;">Setiap karya akan dievaluasi oleh tim senior Bali Web Design berdasarkan kriteria yang sama dengan yang kami terapkan pada proyek klien:</p>
+                <div class="criteria-grid animated" style="animation-delay: 0.7s;">
+                    <div class="criteria-card">
+                        <h3>Desain & Pengalaman Pengguna (UI/UX)</h3>
+                        <p>Apakah desainnya tidak hanya indah secara estetika, tetapi juga strategis, intuitif, dan berpusat pada pengguna?</p>
+                    </div>
+                    <div class="criteria-card">
+                        <h3>Fungsionalitas & Performa Teknis</h3>
+                        <p>Apakah website berjalan mulus, cepat, dan bebas dari bug? Adakah penggunaan fitur interaktif yang cerdas dan memberikan nilai tambah?</p>
+                    </div>
+                    <div class="criteria-card">
+                        <h3>Kualitas Kode & Struktur Proyek</h3>
+                        <p>Seberapa bersih, efisien, dan mudah dikelola (maintainable) kode yang Anda tulis? Apakah Anda mengikuti best practices dalam pengembangan?</p>
+                    </div>
+                    <div class="criteria-card">
+                        <h3>Responsivitas & Aksesibilitas</h3>
+                        <p>Apakah website memberikan pengalaman yang konsisten dan optimal di semua perangkat, serta dapat diakses oleh semua kalangan pengguna?</p>
+                    </div>
+                </div>
+
+                <h2 class="animated" style="animation-delay: 0.8s;">Siapa yang Bertarung?</h2>
+                <div class="highlight-box animated" style="animation-delay: 0.9s;">
+                    <p>Kompetisi ini wajib diikuti oleh semua <strong>peserta magang (intern)</strong> yang saat ini aktif di <strong>Bali Web Design</strong>. Ini adalah kesempatan Anda untuk bersinar.</p>
+                </div>
+
+                <div class="highlight-box animated" style="animation-delay: 1.0s;">
+                    <p><strong>Lihat ini bukan sebagai tugas, tetapi sebagai panggung.</strong><br>
+                    Tunjukkan pada kami visi, keahlian, dan hasrat yang membuat Anda layak menjadi bagian dari masa depan industri ini.<br><br>
+                    <strong>Selamat berkarya, dan semoga portofolio terbaik yang menang!</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const container = document.querySelector(".container");
+        container.addEventListener("mousemove", e => {
+            const rect = container.getBoundingClientRect();
+            container.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+            container.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+        });
+    </script>
+</body>
+</html>

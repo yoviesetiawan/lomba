@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard | Lomba Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <style>
+        /* CSS untuk Countdown Timer */
+        .countdown-section {
+            background: rgba(255, 255, 255, 0.05 );
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 600px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .countdown-section h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            text-align: center;
+        }
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 12px;
+            min-width: 80px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .countdown-item span {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-gold, #FFD700);
+            line-height: 1;
+        }
+        .countdown-item label {
+            font-size: 0.8rem;
+            color: var(--text-muted, #aaa);
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+        }
+        #countdown-text {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div id="commentsModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2 id="modalParticipantName"></h2>
+            <ul id="commentsList"></ul>
+            <button id="closeModalBtn" class="button">Tutup</button>
+        </div>
+    </div>
+    <div class="celestial-background">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div class="aurora-blob blob1"></div>
+        <div class="aurora-blob blob2"></div>
+    </div>
+    <div class="container">
+        <div class="content-wrapper">
+            <nav class="navbar animated" style="animation-delay: 0.1s;">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">Tentang</a>
+                <a href="gallery.html" class="nav-link">Galeri</a>
+                <a href="vote.html" class="nav-link">Vote Favorit</a>
+                <a href="winners.html" class="nav-link">Pemenang</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                <a href="statistics.html" class="nav-link">Statistik</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+                <a href="login.html" class="nav-link">Area Juri</a>
+            </nav>
+            <h1 class="animated" style="animation-delay: 0.2s;">Leaderboard</h1>
+            
+            <!-- Area Cooldown dengan Desain Baru -->
+            <div id="cooldownView" style="display: none;">
+                <div id="countdown-section" class="countdown-section animated" style="animation-delay: 0.3s;">
+                    <h2>⏰ Pengumuman Hasil Akhir</h2>
+                    <div id="countdown-timer" class="countdown-timer">
+                        <div class="countdown-item">
+                            <span id="days">00</span>
+                            <label>Hari</label>
+                        </div>
+                        <div class="countdown-item">
+                            <span id="hours">00</span>
+                            <label>Jam</label>
+                        </div>
+                        <div class="countdown-item">
+                            <span id="minutes">00</span>
+                            <label>Menit</label>
+                        </div>
+                        <div class="countdown-item">
+                            <span id="seconds">00</span>
+                            <label>Detik</label>
+                        </div>
+                    </div>
+                    <p id="countdown-text">Hasil akhir akan diumumkan pada <strong>3 Oktober 2025, 17:50 WITA</strong></p>
+                </div>
+                 <p class="animated" style="animation-delay: 0.5s; font-size: 0.9rem; text-align: center;">(Dewan juri dapat melihat hasil sementara)</p>
+            </div>
+
+            <div id="leaderboardView" style="display: none;">
+                <div id="prankMessage" style="text-align: center; display: none;">
+                    <img src="https://pbs.twimg.com/media/FcI_1L-aIAUUKan.jpg" alt="Nungguin ya" style="max-width: 300px; border-radius: 16px; margin: 1rem auto;" class="animated">
+                </div>
+                <p id="leaderboardDescription" class="animated" style="animation-delay: 0.3s; display: none;">Peringkat diperbarui secara otomatis setiap 15 detik.</p>
+                <table id="leaderboardTable" class="animated" style="animation-delay: 0.4s; display: none;">
+                    <thead>
+                        <tr>
+                            <th>Peringkat</th>
+                            <th>Peserta</th>
+                            <th>Skor Rata-rata</th>
+                            <th>Penilai</th>
+                            <th>Komentar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        const leaderboardBody = document.getElementById("leaderboardBody" );
+        const container = document.querySelector(".container");
+        const modal = document.getElementById("commentsModal");
+        const modalParticipantName = document.getElementById("modalParticipantName");
+        const commentsList = document.getElementById("commentsList");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbz9dX9iKeIAWrGF14qhz3G2owZVHEfo3kyKieK9eEHkPyi165c5sjFDeUKpVEDujTj1nA/exec';
+
+        const cooldownView = document.getElementById("cooldownView" );
+        const leaderboardView = document.getElementById("leaderboardView");
+        const prankMessage = document.getElementById("prankMessage");
+        const leaderboardTable = document.getElementById("leaderboardTable");
+        const leaderboardDescription = document.getElementById("leaderboardDescription");
+        
+        // Waktu Pengumuman Resmi: 3 Oktober 2025, 17:50 WITA (UTC+8)
+        const revealDate = new Date('2025-10-03T17:50:00+08:00');
+
+        const isJury = sessionStorage.getItem("juryAuthenticated") === "true";
+
+        container.addEventListener("mousemove", e => {
+            const rect = container.getBoundingClientRect();
+            container.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+            container.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+        });
+
+        function showCommentsModal(name, comments) {
+            modalParticipantName.textContent = `Komentar untuk ${name}`;
+            commentsList.innerHTML = "";
+            if (comments && comments.length > 0) {
+                comments.forEach(c => {
+                    const li = document.createElement("li");
+                    li.textContent = c;
+                    commentsList.appendChild(li);
+                });
+            } else {
+                commentsList.innerHTML = "<li>Belum ada komentar.</li>";
+            }
+            modal.style.display = "flex";
+            setTimeout(() => modal.classList.add("show"), 10);
+        }
+
+        closeModalBtn.addEventListener("click", () => {
+            modal.classList.remove("show");
+            setTimeout(() => modal.style.display = "none", 300);
+        });
+
+        modal.addEventListener("click", e => {
+            if (e.target === modal) closeModalBtn.click();
+        });
+
+        async function loadLeaderboard() {
+            try {
+                const res = await fetch(scriptURL);
+                if (!res.ok) throw new Error("Network response was not ok");
+                
+                const responsePayload = await res.json();
+                const scores = responsePayload.scores;
+
+                if (!Array.isArray(scores) || scores.length === 0) {
+                    leaderboardBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Belum ada data penilaian.</td></tr>';
+                    return;
+                }
+
+                const scoresByP = scores.reduce((acc, s) => {
+                    if (!s.participant_name) return acc;
+                    const name = s.participant_name.trim();
+                    acc[name] = acc[name] || { total: 0, count: 0, comments: [] };
+                    acc[name].total += parseInt(s.total_score || 0);
+                    acc[name].count++;
+                    if (s.comments) acc[name].comments.push(s.comments);
+                    return acc;
+                }, {});
+
+                const leaderboardData = Object.entries(scoresByP).map(([p, d]) => ({
+                    p,
+                    avg: (d.total / d.count / 4).toFixed(2),
+                    count: d.count,
+                    comments: d.comments
+                })).sort((a, b) => b.avg - a.avg);
+                
+                leaderboardBody.innerHTML = "";
+                leaderboardData.forEach((item, i) => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `<td style="text-align:center;"><strong>#${i + 1}</strong></td><td>${item.p}</td><td style="text-align:center;"><strong>${item.avg}</strong></td><td style="text-align:center;">${item.count}/3</td><td style="text-align:center;"><span class="comment-icon" data-p="${item.p}">💬</span></td>`;
+                    leaderboardBody.appendChild(row);
+                });
+                document.querySelectorAll(".comment-icon").forEach(icon => {
+                    icon.addEventListener("click", e => {
+                        const name = e.target.dataset.p;
+                        const data = leaderboardData.find(d => d.p === name);
+                        showCommentsModal(name, data.comments);
+                    });
+                });
+            } catch (err) {
+                console.error("Gagal memuat leaderboard:", err);
+                leaderboardBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Gagal memuat data.</td></tr>';
+            }
+        }
+
+        function startCountdown() {
+            const interval = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = revealDate.getTime() - now;
+
+                if (distance < 0) {
+                    clearInterval(interval);
+                    document.getElementById('countdown-text').innerHTML = '<strong>🎉 Waktu pengumuman telah tiba!</strong>';
+                    document.getElementById('countdown-timer').style.display = 'none';
+                    
+                    confetti({
+                        particleCount: 150,
+                        spread: 90,
+                        origin: { y: 0.6 }
+                    });
+                    showPrankAndReveal();
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            }, 1000);
+        }
+
+        function showPrankAndReveal() {
+            cooldownView.style.display = "none";
+            leaderboardView.style.display = "block";
+            prankMessage.style.display = "block";
+            leaderboardTable.style.display = "none";
+            setTimeout(() => {
+                prankMessage.style.display = "none";
+                leaderboardTable.style.display = "table";
+                loadLeaderboard();
+            }, 5000);
+        }
+
+        function showLeaderboardForJury() {
+            cooldownView.style.display = "none";
+            leaderboardView.style.display = "block";
+            prankMessage.style.display = "none";
+            leaderboardTable.style.display = "table";
+            leaderboardDescription.style.display = "block";
+            loadLeaderboard();
+            setInterval(loadLeaderboard, 15000);
+        }
+
+        function showPublicLeaderboardNow() {
+            cooldownView.style.display = "none";
+            leaderboardView.style.display = "block";
+            prankMessage.style.display = "none";
+            leaderboardTable.style.display = "table";
+            loadLeaderboard();
+        }
+
+        function showCooldown() {
+            cooldownView.style.display = "block";
+            leaderboardView.style.display = "none";
+            startCountdown();
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const now = new Date();
+            if (isJury) {
+                showLeaderboardForJury();
+            } else if (now < revealDate) {
+                showCooldown();
+            } else {
+                showPublicLeaderboardNow();
+            }
+        });
+    </script>
+</body>
+</html>

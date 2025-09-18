@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pemenang | Lomba Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="celestial-background">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div class="aurora-blob blob1"></div>
+        <div class="aurora-blob blob2"></div>
+    </div>
+
+    <div class="container">
+        <div class="content-wrapper">
+            <nav class="navbar animated" style="animation-delay: 0.1s;">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="gallery.html" class="nav-link">Galeri</a>
+                <a href="vote.html" class="nav-link">Vote Favorit</a>
+                <a href="winners.html" class="nav-link active">Pemenang</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                <a href="login.html" class="nav-link">Area Juri</a>
+            </nav>
+            
+            <h1 class="animated" style="animation-delay: 0.2s;">🏆 Pemenang Lomba Portfolio</h1>
+            
+            <!-- Countdown Timer -->
+            <div id="countdown-section" class="countdown-section animated" style="animation-delay: 0.3s;">
+                <h2>⏰ Pengumuman Pemenang</h2>
+                <div id="countdown-timer" class="countdown-timer">
+                    <div class="countdown-item">
+                        <span id="days">00</span>
+                        <label>Hari</label>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="hours">00</span>
+                        <label>Jam</label>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="minutes">00</span>
+                        <label>Menit</label>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="seconds">00</span>
+                        <label>Detik</label>
+                    </div>
+                </div>
+                <p id="countdown-text">Pengumuman pemenang akan dilakukan pada <strong>3 Oktober 2025, 17:50 WITA</strong></p>
+                <!-- Pesan khusus untuk juri -->
+                <p id="jury-preview-message" style="display: none; text-align: center; font-size: 0.9rem; color: var(--accent-gold); margin-top: 1rem;">
+                    (Sebagai juri, Anda dapat melihat pratinjau hasil sementara di bawah ini)
+                </p>
+            </div>
+
+            <!-- Judging Progress -->
+            <div id="judging-progress" class="judging-progress animated" style="animation-delay: 0.4s;">
+                <h2>📊 Progress Penilaian Juri</h2>
+                <div class="progress-container">
+                    <div class="progress-item">
+                        <div class="progress-label">
+                            <span>Peserta Dinilai</span>
+                            <span id="judged-count">0/10</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="judged-progress" class="progress-fill"></div>
+                        </div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label">
+                            <span>Juri Menyelesaikan</span>
+                            <span id="jury-count">0/3</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="jury-progress" class="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="progress-status" class="progress-status">
+                    <p>🔄 Penilaian sedang berlangsung...</p>
+                </div>
+            </div>
+            
+            <p id="subtitle" class="animated" style="animation-delay: 0.5s;">Hasil perhitungan 3 teratas berdasarkan penilaian juri.</p>
+            
+            <!-- Winners will be shown/hidden based on judging completion and countdown -->
+            <div id="winners-container" style="display: none;">
+                <div id="podium" class="podium">
+                    <!-- Juara 2 (Perak) - Kiri -->
+                    <div class="winner-card rank-2 animated" style="animation-delay: 0.8s;">
+                        <div class="medal">🥈</div>
+                        <img src="https://picsum.photos/150/150?random=22" alt="Foto Ni Nyoman Sri Parwati" class="profile-pic">
+                        <h3>Ni Nyoman Sri Parwati</h3>
+                        <p class="school">SMK TI BADUNG</p>
+                        <div class="quote">"Struktur informasi yang sangat jelas dan konten yang disajikan dengan indah. Sangat profesional."</div>
+                        <a href="https://pawi.my.id" target="_blank" class="button">Lihat Karya</a>
+                    </div>
+
+                    <!-- Juara 1 (Emas ) - Tengah -->
+                    <div class="winner-card rank-1 animated" style="animation-delay: 0.6s;">
+                        <div class="medal">🥇</div>
+                        <img src="https://picsum.photos/150/150?random=21" alt="Foto Refadiva Matahari Farigia" class="profile-pic">
+                        <h3>Refadiva Matahari Farigia</h3>
+                        <p class="school">SMK TI BADUNG</p>
+                        <div class="quote">"Perpaduan sempurna antara estetika desain yang berani dan eksekusi teknis yang tanpa cela. Sebuah mahakarya."</div>
+                        <a href="https://refadiva.my.id" target="_blank" class="button">Lihat Karya</a>
+                    </div>
+
+                    <!-- Juara 3 (Perunggu ) - Kanan -->
+                    <div class="winner-card rank-3 animated" style="animation-delay: 1.0s;">
+                        <div class="medal">🥉</div>
+                        <img src="https://picsum.photos/150/150?random=23" alt="Foto Anak Agung Made Dwi Antari" class="profile-pic">
+                        <h3>Anak Agung Made Dwi Antari</h3>
+                        <p class="school">SMK TI BADUNG</p>
+                        <div class="quote">"Responsivitas yang luar biasa di semua perangkat, menunjukkan pemahaman teknis yang mendalam."</div>
+                        <a href="https://dwiantari.my.id" target="_blank" class="button">Lihat Karya</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        // Efek spotlight kursor
+        const container = document.querySelector('.container' );
+        container.addEventListener('mousemove', e => {
+            const rect = container.getBoundingClientRect();
+            container.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+            container.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+        });
+
+        // Configuration
+        const ANNOUNCEMENT_DATE = new Date('2025-10-03T17:50:07+08:00'); // 3 Oktober 2025, 17:50:07 WITA
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz9dX9iKeIAWrGF14qhz3G2owZVHEfo3kyKieK9eEHkPyi165c5sjFDeUKpVEDujTj1nA/exec';
+        const TOTAL_PARTICIPANTS = 10;
+        const TOTAL_JURY = 3;
+        
+        // === BARU: Periksa status autentikasi juri ===
+        const isJury = sessionStorage.getItem("juryAuthenticated" ) === "true";
+
+        // Update countdown timer
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = ANNOUNCEMENT_DATE.getTime() - now;
+
+            if (distance > 0) {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            } else {
+                // Countdown finished
+                document.getElementById('countdown-text').innerHTML = '<strong>🎉 Waktu pengumuman telah tiba!</strong>';
+                document.getElementById('countdown-timer').style.display = 'none';
+                checkWinnerVisibility();
+            }
+        }
+
+        // Fetch judging progress from Google Sheets
+        async function fetchJudgingProgress() {
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=getJudgingProgress`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const judgedCount = data.judgedParticipants || 0;
+                    const completedJury = data.completedJury || 0;
+                    
+                    document.getElementById('judged-count').textContent = `${judgedCount}/${TOTAL_PARTICIPANTS}`;
+                    document.getElementById('jury-count').textContent = `${completedJury}/${TOTAL_JURY}`;
+                    
+                    const judgedPercentage = (judgedCount / TOTAL_PARTICIPANTS) * 100;
+                    const juryPercentage = (completedJury / TOTAL_JURY) * 100;
+                    
+                    document.getElementById('judged-progress').style.width = `${judgedPercentage}%`;
+                    document.getElementById('jury-progress').style.width = `${juryPercentage}%`;
+                    
+                    const statusElement = document.getElementById('progress-status');
+                    if (judgedCount === TOTAL_PARTICIPANTS && completedJury === TOTAL_JURY) {
+                        statusElement.innerHTML = '<p>✅ Semua penilaian telah selesai!</p>';
+                    } else if (judgedCount === TOTAL_PARTICIPANTS) {
+                        statusElement.innerHTML = '<p>⏳ Menunggu semua juri menyelesaikan penilaian...</p>';
+                    } else {
+                        statusElement.innerHTML = '<p>🔄 Penilaian sedang berlangsung...</p>';
+                    }
+                    
+                    // Panggil checkWinnerVisibility setelah data progress didapat
+                    checkWinnerVisibility({ judgedCount, completedJury });
+                }
+            } catch (error) {
+                console.error('Error fetching judging progress:', error);
+                document.getElementById('progress-status').innerHTML = '<p>⚠️ Tidak dapat memuat data progress</p>';
+            }
+        }
+
+        // === DIPERBARUI: Fungsi untuk memeriksa visibilitas pemenang ===
+        function checkWinnerVisibility(progressData) {
+            const now = new Date().getTime();
+            const countdownFinished = now >= ANNOUNCEMENT_DATE.getTime();
+            
+            // Jika pengguna adalah juri, langsung tampilkan pemenang
+            if (isJury) {
+                document.getElementById('winners-container').style.display = 'block';
+                document.getElementById('subtitle').textContent = 'Pratinjau hasil sementara berdasarkan penilaian saat ini.';
+                // Tampilkan pesan khusus untuk juri jika countdown belum selesai
+                if (!countdownFinished) {
+                    document.getElementById('jury-preview-message').style.display = 'block';
+                } else {
+                    // Jika countdown sudah selesai, sembunyikan countdown section
+                    document.getElementById('countdown-section').style.display = 'none';
+                }
+                return; // Hentikan fungsi di sini untuk juri
+            }
+
+            // Logika untuk pengguna publik (bukan juri)
+            if (progressData) {
+                const { judgedCount, completedJury } = progressData;
+                const judgingComplete = judgedCount === TOTAL_PARTICIPANTS && completedJury === TOTAL_JURY;
+                
+                if (countdownFinished && judgingComplete) {
+                    // Tampilkan pemenang untuk publik
+                    document.getElementById('winners-container').style.display = 'block';
+                    document.getElementById('subtitle').textContent = 'Hasil perhitungan 3 teratas berdasarkan penilaian juri.';
+                    document.getElementById('countdown-section').style.display = 'none';
+                } else {
+                    // Sembunyikan pemenang
+                    document.getElementById('winners-container').style.display = 'none';
+                    if (!countdownFinished) {
+                        document.getElementById('subtitle').textContent = 'Pemenang akan diumumkan setelah countdown selesai dan semua penilaian juri lengkap.';
+                    } else if (!judgingComplete) {
+                        document.getElementById('subtitle').textContent = 'Menunggu semua juri menyelesaikan penilaian untuk mengumumkan pemenang.';
+                    }
+                }
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Jika juri, langsung panggil checkWinnerVisibility tanpa menunggu fetch
+            if (isJury) {
+                checkWinnerVisibility();
+            }
+            
+            // Jalankan fungsi utama untuk semua pengguna
+            updateCountdown();
+            fetchJudgingProgress();
+            
+            // Update countdown setiap detik
+            setInterval(updateCountdown, 1000);
+            
+            // Update judging progress setiap 30 detik
+            setInterval(fetchJudgingProgress, 30000);
+        });
+    </script>
+</body>
+</html>

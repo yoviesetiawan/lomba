@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Juri | Lomba Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="celestial-background">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div class="aurora-blob blob1"></div>
+        <div class="aurora-blob blob2"></div>
+    </div>
+
+    <div class="container" style="max-width: 500px;">
+        <div class="content-wrapper">
+            
+            <!-- === NAVBAR BARU DITEMPATKAN DI SINI === -->
+<nav class="navbar animated" style="animation-delay: 0.1s;">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="about.html" class="nav-link">Tentang</a>
+    <a href="gallery.html" class="nav-link">Galeri</a>
+    <a href="vote.html" class="nav-link">Vote Favorit</a>
+    <a href="winners.html" class="nav-link">Pemenang</a>
+    <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+    <a href="statistics.html" class="nav-link">Statistik</a>
+    <a href="faq.html" class="nav-link">FAQ</a>
+    <a href="login.html" class="nav-link active">Area Juri</a>
+</nav>
+            <!-- === AKHIR NAVBAR BARU === -->
+
+            <h1 class="animated" style="animation-delay: 0.1s;">Akses Terbatas</h1>
+            <p class="animated" style="animation-delay: 0.2s;">Halaman ini hanya untuk dewan juri. Silakan masukkan kode akses untuk melanjutkan.</p>
+            
+            <form id="loginForm" class="animated" style="animation-delay: 0.3s; margin-top: 2rem;">
+                <div class="form-group">
+                    <label for="password">Kode Akses</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Masuk</button>
+                <p id="errorMessage" style="color: #ff6b3a; text-align: center; margin-top: 1rem; display: none;">Kode akses salah.</p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const container = document.querySelector('.container');
+        container.addEventListener('mousemove', e => {
+            const rect = container.getBoundingClientRect();
+            container.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+            container.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+        });
+
+        const loginForm = document.getElementById('loginForm');
+        const passwordInput = document.getElementById('password');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // KATA SANDI RAHASIA ANDA. Ganti dengan kata sandi yang kuat.
+        const JURY_PASSWORD = "BWDJURI2025";
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const enteredPassword = passwordInput.value;
+
+            if (enteredPassword === JURY_PASSWORD) {
+                // Jika benar, simpan status login di sessionStorage dan alihkan
+                sessionStorage.setItem('juryAuthenticated', 'true');
+                window.location.href = 'juri.html';
+            } else {
+                // Jika salah, tampilkan pesan error
+                errorMessage.style.display = 'block';
+                passwordInput.value = ''; // Kosongkan input
+            }
+        });
+    </script>
+</body>
+</html>

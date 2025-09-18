@@ -1,0 +1,1025 @@
+/* =============================================================== */
+/* style.css - Desain Final Lengkap (Revisi Podium ke Grid)        */
+/* =============================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600&display=swap');
+
+/* --- Variabel Global --- */
+:root {
+    --bg-dark: #05050a;
+    --glass-bg: rgba(15, 15, 25, 0.5);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --text-primary: #f0f0f0;
+    --text-secondary: #a0a0a0;
+    --accent-gold: #D4AF37;
+    --accent-silver: #C0C0C0;
+    --accent-bronze: #CD7F32;
+}
+
+/* --- Reset & Pengaturan Dasar Body --- */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    padding: 2rem 1rem;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- Latar Belakang Celestial (Aurora + Bintang) --- */
+.celestial-background {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -2;
+}
+
+.aurora-blob {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.3;
+    filter: blur(120px);
+}
+.blob1 {
+    width: 450px; height: 450px;
+    background: linear-gradient(45deg, #FF6B3A, #FF9B39);
+    top: 5%; left: 15%;
+    animation: move1 25s infinite alternate ease-in-out;
+}
+.blob2 {
+    width: 550px; height: 550px;
+    background: linear-gradient(45deg, #FF9B39, #FFD700);
+    bottom: 5%; right: 15%;
+    animation: move2 30s infinite alternate ease-in-out;
+}
+
+@keyframes move1 { 
+    0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    50% { transform: translate(50px, 25px) rotate(45deg) scale(1.1); }
+    100% { transform: translate(100px, 50px) rotate(90deg) scale(1.2); }
+}
+@keyframes move2 { 
+    0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    50% { transform: translate(-40px, -30px) rotate(-45deg) scale(0.9); }
+    100% { transform: translate(-80px, -60px) rotate(-90deg) scale(0.8); }
+}
+
+#stars, #stars2 {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-repeat: repeat;
+    background-position: 0 0;
+    z-index: -1;
+    background-image: radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+                      radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                      radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+                      radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+                      radial-gradient(2px 2px at 160px 30px, #ddd, transparent);
+    background-size: 200px 100px;
+}
+#stars { animation: move-twink-back 200s linear infinite; }
+#stars2 { animation: move-twink-back 150s linear infinite; opacity: 0.7; }
+
+@keyframes move-twink-back {
+    from { background-position: 0 0; }
+    to { background-position: -10000px 5000px; }
+}
+
+/* --- Kontainer Utama & Efek Kaca --- */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    scrollbar-width: none;
+}
+.container::-webkit-scrollbar { display: none; }
+
+/* Efek Spotlight Kursor */
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border-radius: 24px;
+    background: radial-gradient(300px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.08), transparent 80%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 0;
+}
+.container:hover::before { opacity: 1; }
+
+.content-wrapper { position: relative; z-index: 1; }
+
+/* --- Tipografi & Elemen Umum --- */
+.animated {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+@keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.2rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    letter-spacing: 1.5px;
+    background: linear-gradient(45deg, var(--accent-gold), #FFD700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+h2 {
+    font-weight: 600; font-size: 1.5rem;
+    margin-top: 3rem; margin-bottom: 1.5rem;
+    text-align: center;
+    color: var(--text-primary);
+}
+
+p, li { 
+    color: var(--text-secondary); 
+    text-align: center; 
+    line-height: 1.8; 
+}
+ul { list-style: none; padding: 0; }
+
+/* --- Navbar --- */
+.navbar {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+.nav-link {
+    color: var(--text-secondary);
+    font-weight: 500;
+    padding: 0.6rem 1rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    text-decoration: none;
+    border: 1px solid transparent;
+}
+.nav-link:hover { 
+    color: var(--text-primary); 
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--border-color);
+}
+.nav-link.active { 
+    color: var(--accent-gold); 
+    font-weight: 600; 
+    background: rgba(212, 175, 55, 0.1);
+    border-color: var(--accent-gold);
+}
+
+/* --- Formulir & Input --- */
+.form-group { margin-bottom: 1.5rem; }
+label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-secondary); }
+
+select, input, textarea {
+    width: 100%; padding: 0.9rem 1.2rem;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif; font-size: 1rem;
+    color: var(--text-primary);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+select:focus, input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+select {
+    appearance: none; -webkit-appearance: none; -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23a0a0a0' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+}
+select option { background: var(--bg-dark); color: var(--text-primary); }
+
+/* --- Tombol --- */
+.button, button {
+    width: 100%; padding: 1rem;
+    border: 1px solid var(--accent-gold);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--accent-gold);
+    font-size: 1rem; font-weight: 600;
+    cursor: pointer; margin-top: 1.5rem;
+    position: relative; overflow: hidden;
+    transition: all 0.4s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+.button::before, button::before {
+    content: ''; position: absolute; top: 0; left: -75%;
+    width: 50%; height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 100%);
+    transform: skewX(-25deg);
+    transition: left 0.6s ease;
+}
+.button:hover, button:hover {
+    color: var(--bg-dark);
+    background-color: var(--accent-gold);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+    transform: translateY(-2px);
+}
+.button:hover::before, button:hover::before { left: 125%; }
+
+button:disabled {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+    cursor: not-allowed;
+}
+button:disabled:hover { transform: none; }
+button:disabled:hover::before { display: none; }
+
+/* --- Tabel (Leaderboard) --- */
+table {
+    width: 100%; margin-top: 2rem;
+    border-collapse: collapse; text-align: left;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 16px;
+    overflow: hidden;
+}
+th, td { 
+    padding: 1.2rem 1rem; 
+    border-bottom: 1px solid var(--border-color); 
+}
+th { 
+    color: var(--text-secondary); 
+    font-weight: 500; 
+    text-transform: uppercase; 
+    font-size: 0.8rem; 
+    background: rgba(255, 255, 255, 0.05);
+}
+td strong { color: var(--accent-gold); font-weight: 600; }
+.comment-icon { 
+    cursor: pointer; 
+    font-size: 1.2rem; 
+    opacity: 0.6; 
+    transition: all 0.3s; 
+    padding: 0.5rem;
+    border-radius: 8px;
+}
+.comment-icon:hover { 
+    opacity: 1; 
+    color: var(--accent-gold); 
+    background: rgba(212, 175, 55, 0.1);
+}
+
+/* --- Halaman Galeri & Kartu Peserta Umum --- */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+.participant-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(10px);
+}
+.participant-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    border-color: var(--accent-gold);
+}
+.card-image {
+    width: 100%; height: 200px;
+    object-fit: cover; object-position: top center;
+    border-bottom: 1px solid var(--border-color);
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+.participant-card:hover .card-image { opacity: 1; }
+.card-content { 
+    padding: 1.5rem; 
+    display: flex; 
+    flex-direction: column; 
+    flex-grow: 1; 
+}
+.card-content h3 { 
+    font-size: 1.2rem; 
+    margin-bottom: 0.5rem; 
+    color: var(--text-primary); 
+    text-align: left; 
+}
+.card-content p { 
+    font-size: 0.9rem; 
+    color: var(--text-secondary); 
+    text-align: left; 
+    line-height: 1.5; 
+    margin-bottom: 1.5rem; 
+}
+.card-content .button { 
+    padding: 0.75rem; 
+    font-size: 0.9rem; 
+    margin-top: auto; 
+    text-align: center; 
+    display: block; 
+}
+
+/* --- Halaman Voting --- */
+.vote-results {
+    position: relative; 
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 8px; 
+    height: 30px; 
+    margin-bottom: 1.5rem;
+    overflow: hidden; 
+    border: 1px solid var(--border-color);
+}
+.vote-bar {
+    position: absolute; 
+    top: 0; left: 0; 
+    height: 100%;
+    background: linear-gradient(45deg, var(--accent-gold), #FFD700);
+    border-radius: 8px;
+    transition: width 0.5s ease-in-out;
+}
+.vote-text {
+    position: absolute; 
+    width: 100%; 
+    height: 100%;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    font-size: 0.9rem; 
+    font-weight: 600; 
+    color: var(--text-primary);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+}
+
+/* --- Halaman Status Penjurian (Progress Chart) --- */
+.progress-chart-container {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+    gap: 1.5rem; 
+    margin: 3rem 0;
+}
+.progress-circle {
+    position: relative; 
+    width: 150px; 
+    height: 150px;
+    border-radius: 50%; 
+    display: grid; 
+    place-items: center;
+    background: conic-gradient(var(--accent-gold) 0deg, rgba(255, 255, 255, 0.1) 0deg);
+    transition: background 1s ease-out;
+}
+.progress-circle::before {
+    content: ""; 
+    position: absolute; 
+    width: 85%; 
+    height: 85%;
+    background: var(--bg-dark); 
+    border-radius: 50%;
+}
+.progress-value {
+    position: relative; 
+    font-size: 2.2rem;
+    font-weight: 600; 
+    color: var(--text-primary);
+}
+.progress-label { 
+    font-size: 1rem; 
+    color: var(--text-secondary); 
+    text-align: center; 
+    line-height: 1.6; 
+}
+
+/* =================================================================== */
+/* --- CSS PERBAIKAN: Podium Pemenang v6 (Fixed Grid Layout) --- */
+/* =================================================================== */
+.podium {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas: "second first third";
+    gap: 2rem;
+    align-items: flex-start;
+    margin-top: 4rem;
+    padding: 2rem 0;
+    min-height: 600px;
+}
+
+/* Di layar kecil, ubah menjadi 1 kolom */
+@media (max-width: 900px) {
+    .podium {
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+            "first"
+            "second"
+            "third";
+        gap: 2.5rem;
+        align-items: stretch;
+        min-height: auto;
+    }
+}
+
+.winner-card {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(15px);
+}
+
+.winner-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Juara 1 (Emas) - Posisi tengah dan lebih tinggi */
+.winner-card.rank-1 {
+    grid-area: first;
+    border: 2px solid var(--accent-gold);
+    padding: 2.5rem;
+    box-shadow: 0 0 50px rgba(212, 175, 55, 0.3);
+    background: linear-gradient(145deg, rgba(212, 175, 55, 0.1), rgba(255, 215, 0, 0.05));
+    animation: gold-glow 3s infinite alternate ease-in-out;
+    position: relative;
+    z-index: 2;
+}
+.winner-card.rank-1:hover {
+    transform: translateY(-10px) scale(1.03);
+}
+
+/* Juara 2 (Perak) - Posisi kiri */
+.winner-card.rank-2 {
+    grid-area: second;
+    border: 2px solid var(--accent-silver);
+    box-shadow: 0 0 30px rgba(192, 192, 192, 0.2);
+    background: linear-gradient(145deg, rgba(192, 192, 192, 0.1), rgba(192, 192, 192, 0.05));
+}
+
+/* Juara 3 (Perunggu) - Posisi kanan */
+.winner-card.rank-3 {
+    grid-area: third;
+    border: 2px solid var(--accent-bronze);
+    box-shadow: 0 0 30px rgba(205, 127, 50, 0.2);
+    background: linear-gradient(145deg, rgba(205, 127, 50, 0.1), rgba(205, 127, 50, 0.05));
+}
+
+/* Di layar kecil, reset semua pengaturan transform */
+@media (max-width: 900px) {
+    .winner-card.rank-1, .winner-card.rank-2, .winner-card.rank-3 {
+        transform: translateY(0);
+    }
+    .winner-card.rank-1:hover {
+        transform: translateY(-10px) scale(1.02);
+    }
+}
+
+@keyframes gold-glow {
+    from { box-shadow: 0 0 40px rgba(212, 175, 55, 0.3); }
+    to { box-shadow: 0 0 70px rgba(212, 175, 55, 0.6); }
+}
+
+.winner-card .medal {
+    font-size: 4rem; 
+    line-height: 1;
+    margin-bottom: 1rem; 
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.winner-card .profile-pic {
+    width: 100px; 
+    height: 100px;
+    border-radius: 50%; 
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    object-fit: cover; 
+    margin: 0 auto;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.winner-card:hover .profile-pic { 
+    transform: scale(1.1); 
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+}
+.winner-card.rank-1 .profile-pic {
+    width: 120px; 
+    height: 120px;
+    border-color: var(--accent-gold);
+    border-width: 5px;
+}
+.winner-card.rank-2 .profile-pic {
+    border-color: var(--accent-silver);
+}
+.winner-card.rank-3 .profile-pic {
+    border-color: var(--accent-bronze);
+}
+
+.winner-card h3 {
+    font-family: 'Playfair Display', serif; 
+    font-size: 1.8rem;
+    color: var(--text-primary); 
+    margin-top: 1.5rem; 
+    margin-bottom: 0.25rem;
+    font-weight: 700;
+}
+
+.winner-card .school {
+    font-size: 0.9rem; 
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    font-weight: 500;
+}
+
+.winner-card .quote {
+    font-style: italic; 
+    color: var(--text-secondary);
+    padding: 1.5rem; 
+    margin: 0; 
+    font-size: 0.95rem;
+    flex-grow: 1; 
+    border: none;
+    background: rgba(0,0,0,0.2); 
+    border-radius: 12px;
+    text-align: left;
+    line-height: 1.6;
+    border-left: 4px solid var(--accent-gold);
+}
+
+.winner-card.rank-2 .quote {
+    border-left-color: var(--accent-silver);
+}
+
+.winner-card.rank-3 .quote {
+    border-left-color: var(--accent-bronze);
+}
+
+.winner-card .button {
+    padding: 1rem; 
+    font-size: 0.9rem;
+    margin-top: 2rem; 
+    text-align: center;
+    display: block; 
+    border-width: 2px;
+    font-weight: 600;
+}
+
+/* --- Elemen Lain-lain (Toast, Modal, dll) --- */
+.toast {
+    position: fixed; 
+    bottom: 30px; 
+    left: 50%;
+    transform: translateX(-50%); 
+    padding: 1rem 1.5rem;
+    border-radius: 12px; 
+    color: var(--text-primary);
+    background-color: #1F2937; 
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    opacity: 0; 
+    transition: all 0.3s; 
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(-10px); }
+.toast.error { border-left: 4px solid #dc3545; }
+
+.modal-overlay {
+    position: fixed; 
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    z-index: 2000; 
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.modal-content {
+    width: 90%; 
+    max-width: 600px;
+    padding: 2rem; 
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color); 
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    transform: scale(0.95); 
+    transition: transform 0.3s ease;
+    backdrop-filter: blur(30px);
+}
+.modal-overlay.show { opacity: 1; }
+.modal-overlay.show .modal-content { transform: scale(1); }
+
+#commentsList {
+    list-style: none; 
+    padding: 0; 
+    margin: 2rem 0;
+    max-height: 40vh; 
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+#commentsList::-webkit-scrollbar { display: none; }
+#commentsList li {
+    background: rgba(0,0,0,0.2); 
+    padding: 1rem;
+    border-radius: 8px; 
+    margin-bottom: 1rem;
+    text-align: left; 
+    line-height: 1.6;
+    border-left: 3px solid var(--accent-gold);
+}
+#closeModalBtn { margin-top: 1rem; }
+
+@keyframes drum-roll {
+    0%, 100% { color: var(--accent-gold); transform: scale(1); }
+    25% { color: var(--text-primary); transform: scale(1.05); }
+    50% { color: var(--accent-gold); transform: scale(1); }
+    75% { color: var(--text-primary); transform: scale(1.1); }
+}
+.drum-roll-effect { animation: drum-roll 0.2s linear 5; }
+
+/* --- Responsivitas Tambahan --- */
+@media (max-width: 768px) {
+    body { padding: 1rem 0.5rem; }
+    .container { padding: 2rem 1.5rem; }
+    h1 { font-size: 2.5rem; }
+    .navbar { gap: 0.25rem; }
+    .nav-link { padding: 0.5rem 0.75rem; font-size: 0.85rem; }
+    .gallery-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .winner-card .medal { font-size: 3rem; }
+    .winner-card h3 { font-size: 1.5rem; }
+}
+
+@media (max-width: 480px) {
+    .container { padding: 1.5rem 1rem; }
+    h1 { font-size: 2rem; }
+    .winner-card { padding: 1.5rem; }
+    .winner-card.rank-1 { padding: 2rem; }
+}
+
+/* --- Modern FAQ Styling --- */
+.faq-section {
+    margin-top: 3rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.faq-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.faq-item:hover {
+    border-color: var(--accent-gold);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.1);
+}
+
+.faq-question {
+    padding: 1.5rem 2rem;
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid transparent;
+}
+
+.faq-question:hover {
+    color: var(--accent-gold);
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.faq-question::after {
+    content: '+';
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--accent-gold);
+    transition: transform 0.3s ease;
+}
+
+.faq-question.active::after {
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.faq-answer {
+    padding: 0 2rem 1.5rem 2rem;
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.faq-question.active + .faq-answer {
+    max-height: 200px;
+    padding: 1rem 2rem 1.5rem 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* --- Enhanced About Page Styling --- */
+.about-section {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.about-section h2 {
+    position: relative;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.about-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(45deg, var(--accent-gold), #FFD700);
+    border-radius: 2px;
+}
+
+.criteria-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.criteria-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.criteria-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-gold);
+    box-shadow: 0 15px 35px rgba(212, 175, 55, 0.1);
+}
+
+.criteria-card h3 {
+    color: var(--accent-gold);
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.criteria-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    text-align: left;
+}
+
+.highlight-box {
+    background: linear-gradient(145deg, rgba(212, 175, 55, 0.1), rgba(255, 215, 0, 0.05));
+    border: 2px solid var(--accent-gold);
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 2rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.highlight-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.6s ease;
+}
+
+.highlight-box:hover::before {
+    left: 100%;
+}
+
+.highlight-box p {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+
+/* --- Countdown Timer Styling --- */
+.countdown-section {
+    text-align: center;
+    margin: 2rem 0;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+}
+
+.countdown-section h2 {
+    color: var(--accent-gold);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.countdown-timer {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 80px;
+}
+
+.countdown-item span {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--accent-gold);
+    background: rgba(212, 175, 55, 0.1);
+    border: 2px solid var(--accent-gold);
+    border-radius: 12px;
+    padding: 1rem;
+    min-width: 60px;
+    display: block;
+    text-align: center;
+}
+
+.countdown-item label {
+    margin-top: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- Judging Progress Styling --- */
+.judging-progress {
+    margin: 2rem 0;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+}
+
+.judging-progress h2 {
+    color: var(--accent-gold);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.progress-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(45deg, var(--accent-gold), #FFD700);
+    border-radius: 6px;
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+.progress-status {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.progress-status p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* --- Responsive Design for Countdown and Progress --- */
+@media (max-width: 768px) {
+    .countdown-timer {
+        gap: 1rem;
+    }
+    
+    .countdown-item span {
+        font-size: 2rem;
+        padding: 0.8rem;
+        min-width: 50px;
+    }
+    
+    .countdown-section,
+    .judging-progress {
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+    }
+    
+    .progress-container {
+        gap: 1rem;
+    }
+}
+
+/* --- Enhanced Winner Container --- */
+#winners-container {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+

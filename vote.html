@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote Juara Favorit | Lomba Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="celestial-background"><div id="stars"></div><div id="stars2"></div><div class="aurora-blob blob1"></div><div class="aurora-blob blob2"></div></div>
+    <div class="container">
+        <div class="content-wrapper">
+            <nav class="navbar animated" style="animation-delay: 0.1s;">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="about.html" class="nav-link">Tentang</a>
+    <a href="gallery.html" class="nav-link">Galeri</a>
+    <a href="vote.html" class="nav-link active">Vote Favorit</a>
+    <a href="winners.html" class="nav-link">Pemenang</a>
+    <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+    <a href="statistics.html" class="nav-link">Statistik</a>
+    <a href="faq.html" class="nav-link">FAQ</a>
+    <a href="login.html" class="nav-link">Area Juri</a>
+</nav>
+
+            <h1 class="animated" style="animation-delay: 0.2s;">Vote Juara Favorit</h1>
+            <p class="animated" style="animation-delay: 0.3s;">Bantu tentukan siapa yang akan menjadi Juara Favorit pilihan audiens! Anda hanya bisa memilih satu kali.</p>
+
+            <div id="voteGrid" class="gallery-grid">
+                <!-- Kartu voting akan dimuat di sini oleh JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        const container = document.querySelector('.container');
+        const voteGrid = document.getElementById('voteGrid');
+        
+        // PASTIKAN URL INI ADALAH URL DEPLOYMENT TERBARU ANDA
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbz9dX9iKeIAWrGF14qhz3G2owZVHEfo3kyKieK9eEHkPyi165c5sjFDeUKpVEDujTj1nA/exec';
+
+        // Kunci unik untuk menyimpan status vote di penyimpanan lokal browser
+        const VOTE_STATUS_KEY = 'portfolioArenaUserHasVoted';
+
+        // Efek spotlight pada container
+        container.addEventListener('mousemove', e => { 
+            const rect = container.getBoundingClientRect( ); 
+            container.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`); 
+            container.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`); 
+        });
+
+        /**
+         * Fungsi untuk membuat kartu HTML untuk setiap peserta.
+         */
+        function createVoteCard(participant, index, voteCounts, totalVotes, userHasVoted) {
+            const card = document.createElement('div');
+            card.className = 'participant-card animated';
+            card.style.animationDelay = `${0.4 + index * 0.1}s`;
+
+            const nameMatch = participant.name.match(/(.+?)\s\((.+)\)/);
+            const name = nameMatch ? nameMatch[1] : participant.name;
+            const school = nameMatch ? nameMatch[2] : '';
+            
+            const votes = voteCounts[participant.name] || 0;
+            const percentage = totalVotes > 0 ? ((votes / totalVotes) * 100).toFixed(1) : 0;
+
+            let buttonHTML = `<button class="button vote-btn" data-name="${participant.name}">Vote untuk ${name}</button>`;
+            if (userHasVoted) {
+                buttonHTML = `<button class="button" disabled>Sudah Memilih</button>`;
+            }
+
+            card.innerHTML = `
+                <img src="${participant.screenshot}" alt="Screenshot ${name}" class="card-image">
+                <div class="card-content">
+                    <h3>${name}</h3>
+                    <p>${school}</p>
+                    <div class="vote-results">
+                        <div class="vote-progress-bar">
+                            <div class="vote-bar" style="width: ${percentage}%;"></div>
+                        </div>
+                        <span class="vote-text">${votes} Suara (${percentage}%)</span>
+                    </div>
+                    ${buttonHTML}
+                </div>
+            `;
+            return card;
+        }
+
+        /**
+         * Fungsi utama untuk memuat semua data dan menampilkan halaman voting.
+         */
+        async function loadVotePage() {
+            // Langkah 1: Cek status vote dari penyimpanan lokal browser pengguna.
+            const userHasVoted = localStorage.getItem(VOTE_STATUS_KEY) === 'true';
+
+            try {
+                // Langkah 2: Ambil data jumlah total vote dari server.
+                const res = await fetch(`${scriptURL}?action=getVotes`);
+                if (!res.ok) throw new Error(`Network response was not ok: ${res.statusText}`);
+                
+                const responsePayload = await res.json();
+                
+                // PERBAIKAN: Cek apakah response berhasil dan ada data votes
+                if (!responsePayload.success) {
+                    throw new Error(responsePayload.message || 'Gagal mengambil data voting');
+                }
+                
+                const voteCounts = responsePayload.votes || {};
+                const totalVotes = responsePayload.totalVotes || 0;
+
+                // Langkah 3: Tampilkan semua kartu peserta.
+                voteGrid.innerHTML = '';
+                participantsList.forEach((p, i) => {
+                    const card = createVoteCard(p, i, voteCounts, totalVotes, userHasVoted);
+                    voteGrid.appendChild(card);
+                });
+
+                // Langkah 4: Jika pengguna belum vote, aktifkan tombolnya.
+                if (!userHasVoted) {
+                    document.querySelectorAll('.vote-btn').forEach(btn => {
+                        btn.addEventListener('click', handleVoteClick);
+                    });
+                }
+            } catch (error) {
+                console.error("Gagal memuat halaman vote:", error);
+                voteGrid.innerHTML = `<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">Gagal memuat data voting. Coba muat ulang halaman.<br><small>(${error.message})</small></p>`;
+            }
+        }
+
+        /**
+         * Fungsi yang dijalankan saat tombol vote diklik.
+         */
+        async function handleVoteClick(e) {
+            const button = e.target;
+            const participantName = button.dataset.name;
+            const shortName = participantName.split('(')[0].trim();
+
+            // Nonaktifkan semua tombol untuk mencegah klik ganda
+            document.querySelectorAll('.vote-btn').forEach(btn => btn.disabled = true);
+
+            if (confirm(`Anda yakin ingin memilih ${shortName}? Anda tidak bisa mengubah pilihan ini.`)) {
+                button.textContent = 'Mengirim Suara...';
+                try {
+                    // Langkah 1: Kirim vote ke server.
+                    const voteRes = await fetch(`${scriptURL}?action=vote&participant=${encodeURIComponent(participantName)}`);
+                    const result = await voteRes.json();
+
+                    if (result.success) {
+                        alert('Terima kasih! Suara Anda telah dicatat.');
+                        // Langkah 2: Tandai di browser pengguna bahwa mereka sudah vote.
+                        localStorage.setItem(VOTE_STATUS_KEY, 'true');
+                    } else {
+                        alert(`Gagal: ${result.message || 'Terjadi kesalahan.'}`);
+                    }
+                    
+                    // Langkah 3: Muat ulang halaman untuk menampilkan status terbaru.
+                    loadVotePage();
+
+                } catch (error) {
+                    console.error("Error saat voting:", error);
+                    alert('Gagal mengirim suara. Coba lagi.');
+                    // Jika gagal, aktifkan kembali tombolnya
+                    document.querySelectorAll('.vote-btn').forEach(btn => btn.disabled = false);
+                }
+            } else {
+                // Jika pengguna membatalkan, aktifkan kembali tombolnya.
+                document.querySelectorAll('.vote-btn').forEach(btn => btn.disabled = false);
+            }
+        }
+
+        // Jalankan fungsi utama saat halaman selesai dimuat.
+        document.addEventListener('DOMContentLoaded', loadVotePage);
+    </script>
+</body>
+</html>
+

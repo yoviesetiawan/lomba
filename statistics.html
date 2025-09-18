@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistik Lomba | Lomba Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="celestial-background">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div class="aurora-blob blob1"></div>
+        <div class="aurora-blob blob2"></div>
+    </div>
+
+    <div class="container">
+        <div class="content-wrapper">
+            <nav class="navbar animated" style="animation-delay: 0.1s;">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">Tentang</a>
+                <a href="gallery.html" class="nav-link">Galeri</a>
+                <a href="vote.html" class="nav-link">Vote Favorit</a>
+                <a href="winners.html" class="nav-link">Pemenang</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                <a href="statistics.html" class="nav-link active">Statistik</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+                <a href="login.html" class="nav-link">Area Juri</a>
+            </nav>
+            
+            <h1 class="animated" style="animation-delay: 0.2s;">Statistik Lomba</h1>
+            <p class="animated" style="animation-delay: 0.3s;">Visualisasi data dan insight menarik dari Portfolio Arena.</p>
+
+            <div class="stats-grid">
+                <div class="stat-card animated" style="animation-delay: 0.4s;">
+                    <h3>Total Peserta</h3>
+                    <p id="totalParticipants">Loading...</p>
+                </div>
+                <div class="stat-card animated" style="animation-delay: 0.5s;">
+                    <h3>Total Vote</h3>
+                    <p id="totalVotes">Loading...</p>
+                </div>
+                <div class="stat-card animated" style="animation-delay: 0.6s;">
+                    <h3>Rata-rata Skor Juri</h3>
+                    <p id="avgJuryScore">Loading...</p>
+                </div>
+            </div>
+
+            <div class="chart-container animated" style="animation-delay: 0.7s;">
+                <h2>Distribusi Skor Juri</h2>
+                <canvas id="scoreDistributionChart"></canvas>
+            </div>
+
+            <div class="chart-container animated" style="animation-delay: 0.8s;">
+                <h2>Top 5 Peserta (Berdasarkan Vote)</h2>
+                <canvas id="topVotedParticipantsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        const container = document.querySelector(".container");
+        container.addEventListener("mousemove", e => {
+            const rect = container.getBoundingClientRect();
+            container.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+            container.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+        });
+
+        const scriptURL = "https://script.google.com/macros/s/AKfycbz9dX9iKeIAWrGF14qhz3G2owZVHEfo3kyKieK9eEHkPyi165c5sjFDeUKpVEDujTj1nA/exec";
+
+        async function loadStatistics() {
+            try {
+                // Fetch all scores and votes
+                const [scoresRes, votesRes] = await Promise.all([
+                    fetch(`${scriptURL}?action=getScores`),
+                    fetch(`${scriptURL}?action=getVotes`)
+                ]);
+
+                const scoresPayload = await scoresRes.json();
+                const votesPayload = await votesRes.json();
+
+                const scores = scoresPayload.scores || [];
+                const voteCounts = votesPayload.votes || {};
+
+                // Total Participants
+                document.getElementById("totalParticipants").textContent = participantsList.length;
+
+                // Total Votes
+                const totalVotes = Object.values(voteCounts).reduce((sum, count) => sum + count, 0);
+                document.getElementById("totalVotes").textContent = totalVotes;
+
+                // Average Jury Score
+                const totalJuryScore = scores.reduce((sum, s) => sum + (parseInt(s.total_score) || 0), 0);
+                const avgJuryScore = scores.length > 0 ? (totalJuryScore / scores.length / 4).toFixed(2) : "N/A";
+                document.getElementById("avgJuryScore").textContent = avgJuryScore;
+
+                // Score Distribution Chart
+                const scoreBins = {};
+                scores.forEach(s => {
+                    const score = parseInt(s.total_score) / 4; // Normalize to 1-10
+                    const bin = Math.floor(score);
+                    scoreBins[bin] = (scoreBins[bin] || 0) + 1;
+                });
+                const labels = Array.from({ length: 10 }, (_, i) => i + 1);
+                const data = labels.map(label => scoreBins[label] || 0);
+
+                new Chart(document.getElementById("scoreDistributionChart"), {
+                    type: "bar",
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: "Jumlah Penilaian",
+                            data: data,
+                            backgroundColor: "rgba(75, 192, 192, 0.6)",
+                            borderColor: "rgba(75, 192, 192, 1)",
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: { beginAtZero: true, title: { display: true, text: "Jumlah" } },
+                            x: { title: { display: true, text: "Skor Rata-rata" } }
+                        }
+                    }
+                });
+
+                // Top 5 Voted Participants Chart
+                const sortedVotes = Object.entries(voteCounts)
+                    .sort(([, a], [, b]) => b - a)
+                    .slice(0, 5);
+                const topVotedLabels = sortedVotes.map(([name]) => name.split("(")[0].trim());
+                const topVotedData = sortedVotes.map(([, count]) => count);
+
+                new Chart(document.getElementById("topVotedParticipantsChart"), {
+                    type: "pie",
+                    data: {
+                        labels: topVotedLabels,
+                        datasets: [{
+                            data: topVotedData,
+                            backgroundColor: [
+                                "#FFD700", // Gold
+                                "#C0C0C0", // Silver
+                                "#CD7F32", // Bronze
+                                "#ADD8E6", // Light Blue
+                                "#90EE90"  // Light Green
+                            ],
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: "top" },
+                            title: { display: true, text: "Top 5 Peserta (Berdasarkan Vote)" }
+                        }
+                    }
+                });
+
+            } catch (error) {
+                console.error("Error loading statistics:", error);
+                document.getElementById("totalParticipants").textContent = "Error";
+                document.getElementById("totalVotes").textContent = "Error";
+                document.getElementById("avgJuryScore").textContent = "Error";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadStatistics);
+    </script>
+</body>
+</html>
